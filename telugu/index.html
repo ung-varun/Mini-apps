@@ -103,6 +103,43 @@ max-width:400px;
 border-radius:10px;
 }
 
+  .media-box{
+height:200px;
+display:flex;
+align-items:center;
+justify-content:center;
+margin-top:10px;
+}
+
+.media-box img{
+max-height:180px;
+max-width:180px;
+position:absolute;
+}
+
+.emoji{
+font-size:90px;
+}
+
+.media-box{
+height:200px;
+display:flex;
+align-items:center;
+justify-content:center;
+position:relative;
+margin-top:10px;
+}
+
+.media-box img{
+max-height:180px;
+max-width:180px;
+position:absolute;
+}
+
+.emoji{
+font-size:90px;
+}  
+
 </style>
 
 </head>
@@ -134,9 +171,14 @@ How to Use
 
 <div class="letter" id="letter"></div>
 
+<div class="media-box">
+
 <img id="picture">
 
 <div class="emoji" id="emoji"></div>
+
+</div>
+
 
 <div class="word" id="word"></div>
 
@@ -328,18 +370,18 @@ emoji.innerText=""
 if(d.img){
 
 img.src="images/"+d.img
-img.style.display=showPicture?"block":"none"
+img.style.visibility=showPicture?"visible":"hidden"
 
 img.onerror=function(){
 
-img.style.display="none"
+img.style.visibility="hidden"
 emoji.innerText=d.emoji
 
 }
 
 }else{
 
-img.style.display="none"
+img.style.visibility="hidden"
 emoji.innerText=d.emoji
 
 }
@@ -411,20 +453,34 @@ function buildGrid(){
 
 let v=document.getElementById("vowels")
 
+let row1=document.createElement("div")
+row1.className="grid-row"
+
+let row2=document.createElement("div")
+row2.className="grid-row"
+
 vowels.forEach((x,i)=>{
 
 let s=document.createElement("span")
 s.innerText=x.l
-s.onclick=()=>{index=i;show()}
 
-let row=document.createElement("div")
-row.className="grid-row"
+s.onclick=()=>{
 
-row.appendChild(s)
+index=i
+show()
 
-v.appendChild(row)
+}
+
+if(i<8){
+row1.appendChild(s)
+}else{
+row2.appendChild(s)
+}
 
 })
+
+v.appendChild(row1)
+v.appendChild(row2)
 
 
 let c=document.getElementById("consonants")
