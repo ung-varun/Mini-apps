@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 <title>తెలుగు వర్ణమాల</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="manifest" href="manifest.json">
 
 <style>
 
@@ -20,13 +19,9 @@ text-align:center;
 header{
 background:#2563eb;
 color:white;
-padding:15px;
+padding:16px;
 font-size:22px;
 font-weight:bold;
-}
-
-.controls{
-margin-top:10px;
 }
 
 button{
@@ -60,12 +55,17 @@ margin-top:10px;
 border-radius:10px;
 }
 
-.grid{
-margin-top:20px;
-padding:10px;
+.emoji{
+font-size:80px;
+margin-top:10px;
 }
 
-.grid span{
+.grid-row{
+margin:8px;
+}
+
+.grid-row span{
+
 display:inline-block;
 font-size:28px;
 background:white;
@@ -74,6 +74,7 @@ margin:6px;
 border-radius:8px;
 box-shadow:0 2px 6px rgba(0,0,0,0.15);
 cursor:pointer;
+
 }
 
 footer{
@@ -103,64 +104,65 @@ border-radius:10px;
 }
 
 </style>
+
 </head>
 
+
 <body>
+
 
 <header>
 
 తెలుగు వర్ణమాల
 
-<div class="controls">
+<br>
 
 <button onclick="togglePicture()" id="picBtn">
-🖼 Picture: ON
+🖼 Picture ON
 </button>
 
 <button onclick="toggleAuto()" id="autoBtn">
-🔊 Auto Sound: OFF
+🔊 Auto Sound OFF
 </button>
 
 <button onclick="showHelp()">
 How to Use
 </button>
 
-<button onclick="installApp()">
-Install App
-</button>
-
-</div>
-
 </header>
 
 
-<div class="letter" id="letter">అ</div>
+<div class="letter" id="letter"></div>
 
-<img id="picture" src="images/amma.jpg">
+<img id="picture">
 
-<div class="word" id="word">అమ్మ</div>
+<div class="emoji" id="emoji"></div>
+
+<div class="word" id="word"></div>
 
 
 <div>
 
 <button onclick="speakLetter()">🔊 Letter</button>
+
 <button onclick="speakWord()">🔊 Word</button>
 
-</div>
-
-<div>
-
 <button onclick="nextLetter()">Next</button>
+
 <button onclick="randomLetter()">Random</button>
 
 </div>
 
 
 <h3>అచ్చులు</h3>
-<div class="grid" id="vowels"></div>
+
+<div id="vowels"></div>
+
 
 <h3>హల్లులు</h3>
-<div class="grid" id="consonants"></div>
+
+<div id="consonants"></div>
+
 
 
 <div class="modal" id="helpModal">
@@ -170,10 +172,15 @@ Install App
 <h3>How Parents Can Use</h3>
 
 <p>
-1. Show the letter to the child.<br>
-2. Ask the child to say the letter.<br>
-3. Tap 🔊 to hear pronunciation.<br>
-4. Turn off picture to test memory.<br>
+
+1. Show the letter to the child.<br><br>
+
+2. Ask the child to say the letter.<br><br>
+
+3. Press 🔊 to hear the correct pronunciation.<br><br>
+
+4. Turn OFF picture to test memory.
+
 </p>
 
 <button onclick="closeHelp()">Close</button>
@@ -183,14 +190,17 @@ Install App
 </div>
 
 
+
 <footer>
 
-⭐ Star on GitHub
+⭐ Star this project on GitHub
 
 <br>
 
 <a href="https://github.com/ung-varun/Mini-apps">
+
 github.com/ung-varun/Mini-apps
+
 </a>
 
 <br><br>
@@ -200,63 +210,108 @@ Built by <b>Varun Ungurala</b>
 </footer>
 
 
+
 <script>
+
 
 let showPicture=true
 let autoSound=false
-let deferredPrompt
+
 
 const vowels=[
 
-{l:"అ",w:"అమ్మ",img:"amma.jpg"},
-{l:"ఆ",w:"ఆవు",img:"aavu.jpg"},
-{l:"ఇ",w:"ఇల్లు",img:"illu.jpg"},
-{l:"ఈ",w:"ఈగ",img:"eega.jpg"},
-{l:"ఉ",w:"ఉడుత",img:"uduta.jpg"},
-{l:"ఊ",w:"ఊయల",img:"ooyala.jpg"},
-{l:"ఋ",w:"ఋషి",img:"rushi.jpg"},
-{l:"ఎ",w:"ఎలుక",img:"eluka.jpg"},
-{l:"ఏ",w:"ఏనుగు",img:"eenugu.jpg"},
-{l:"ఐ",w:"ఐదు",img:"aidu.jpg"},
-{l:"ఒ",w:"ఒంటె",img:"onte.jpg"},
-{l:"ఓ",w:"ఓడ",img:"oda.jpg"},
-{l:"ఔ",w:"ఔషధం",img:"oushadham.jpg"},
-{l:"అం",w:"అంకం",img:"ankam.jpg"},
-{l:"అః",w:"అః",img:"aha.jpg"}
+{l:"అ",w:"అమ్మ",img:"amma.png",emoji:"👩"},
+{l:"ఆ",w:"ఆవు",img:"aavu.png",emoji:"🐄"},
+{l:"ఇ",w:"ఇల్లు",img:"illu.png",emoji:"🏠"},
+{l:"ఈ",w:"ఈగ",img:"eega.png",emoji:"🪰"},
+{l:"ఉ",w:"ఉడుత",img:"uduta.png",emoji:"🐿️"},
+{l:"ఊ",w:"ఊయల",img:"ooyala.png",emoji:"🪑"},
+{l:"ఋ",w:"ఋషి",img:"rushi.png",emoji:"🧘"},
+{l:"ౠ",w:"ఋషులు",img:"",emoji:"🧘"},
+{l:"ఎ",w:"ఎలుక",img:"eluka.png",emoji:"🐭"},
+{l:"ఏ",w:"ఏనుగు",img:"eenugu.png",emoji:"🐘"},
+{l:"ఐ",w:"ఐదు",img:"aidu.png",emoji:"5️⃣"},
+{l:"ఒ",w:"ఒంటె",img:"onte.png",emoji:"🐪"},
+{l:"ఓ",w:"ఓడ",img:"oda.png",emoji:"🚢"},
+{l:"ఔ",w:"ఔషధం",img:"oushadham.png",emoji:"💊"},
+{l:"అం",w:"అంకం",img:"ankam.png",emoji:"🔢"},
+{l:"అః",w:"అహం",img:"aham.png",emoji:"🗣️"}
 
 ]
 
-const consonants=[
 
-{l:"క",w:"కలం",img:"kalam.jpg"},
-{l:"ఖ",w:"ఖడ్గం",img:"khadgam.jpg"},
-{l:"గ",w:"గడియారం",img:"gadiyam.jpg"},
-{l:"ఘ",w:"ఘంట",img:"ghanta.jpg"},
-{l:"చ",w:"చెట్టు",img:"chettu.jpg"},
-{l:"జ",w:"జలము",img:"jalamu.jpg"},
-{l:"ట",w:"టమోటా",img:"tomato.jpg"},
-{l:"డ",w:"డబ్బు",img:"dabbu.jpg"},
-{l:"త",w:"తల",img:"tala.jpg"},
-{l:"ద",w:"దనం",img:"dhanam.jpg"},
-{l:"ప",w:"పండు",img:"pandu.jpg"},
-{l:"బ",w:"బంతి",img:"banthi.jpg"},
-{l:"మ",w:"మామిడి",img:"mamidi.jpg"},
-{l:"య",w:"యజ్ఞం",img:"yagnam.jpg"},
-{l:"ర",w:"రథం",img:"ratham.jpg"},
-{l:"ల",w:"లత",img:"latha.jpg"},
-{l:"వ",w:"వనం",img:"vanam.jpg"},
-{l:"శ",w:"శంఖం",img:"shankam.jpg"},
-{l:"స",w:"సముద్రం",img:"samudram.jpg"},
-{l:"హ",w:"హంస",img:"hamsa.jpg"},
-{l:"ళ",w:"పళ్లు",img:"pallu.jpg"},
-{l:"క్ష",w:"క్షత్రియ",img:"kshatriya.jpg"},
-{l:"ఱ",w:"ఱాము",img:"ramu.jpg"}
+const consonantRows=[
+
+[
+{l:"క",w:"కలం",img:"kalam.png",emoji:"🖊️"},
+{l:"ఖ",w:"ఖడ్గం",img:"khadgam.png",emoji:"🗡️"},
+{l:"గ",w:"గడియారం",img:"gadiyaram.png",emoji:"⏰"},
+{l:"ఘ",w:"ఘంట",img:"ghanta.png",emoji:"🔔"},
+{l:"ఙ",w:"ఙానం",img:"",emoji:"📚"}
+],
+
+[
+{l:"చ",w:"చెట్టు",img:"chettu.png",emoji:"🌳"},
+{l:"ఛ",w:"ఛత్రం",img:"chatram.png",emoji:"⛱️"},
+{l:"జ",w:"జలము",img:"jalamu.png",emoji:"💧"},
+{l:"ఝ",w:"ఝాన్సీ",img:"jhansi.png",emoji:"🏰"},
+{l:"ఞ",w:"ఞానం",img:"",emoji:"📚"}
+],
+
+[
+{l:"ట",w:"టమోటా",img:"tomato.png",emoji:"🍅"},
+{l:"ఠ",w:"ఠాకూర్",img:"thakur.png",emoji:"👑"},
+{l:"డ",w:"డబ్బు",img:"dabbu.png",emoji:"💰"},
+{l:"ఢ",w:"ఢమరు",img:"dhamaru.png",emoji:"🥁"},
+{l:"ణ",w:"ణగరం",img:"",emoji:"🏙️"}
+],
+
+[
+{l:"త",w:"తల",img:"tala.png",emoji:"👤"},
+{l:"థ",w:"థర్మస్",img:"thermos.png",emoji:"🧴"},
+{l:"ద",w:"దనం",img:"dhanam.png",emoji:"💰"},
+{l:"ధ",w:"ధనం",img:"dhanam.png",emoji:"💰"},
+{l:"న",w:"నది",img:"nadi.png",emoji:"🏞️"}
+],
+
+[
+{l:"ప",w:"పండు",img:"pandu.png",emoji:"🍎"},
+{l:"ఫ",w:"ఫలం",img:"phalam.png",emoji:"🍊"},
+{l:"బ",w:"బంతి",img:"banthi.png",emoji:"⚽"},
+{l:"భ",w:"భూమి",img:"bhoomi.png",emoji:"🌍"},
+{l:"మ",w:"మామిడి",img:"mamidi.png",emoji:"🥭"}
+],
+
+[
+{l:"య",w:"యజ్ఞం",img:"yagnam.png",emoji:"🔥"},
+{l:"ర",w:"రథం",img:"ratham.png",emoji:"🛞"},
+{l:"ల",w:"లత",img:"latha.png",emoji:"🌿"},
+{l:"వ",w:"వనం",img:"vanam.png",emoji:"🌲"}
+],
+
+[
+{l:"శ",w:"శంఖం",img:"shankam.png",emoji:"🐚"},
+{l:"ష",w:"షడ్రుచులు",img:"shadruchulu.png",emoji:"🍽️"},
+{l:"స",w:"సముద్రం",img:"samudram.png",emoji:"🌊"},
+{l:"హ",w:"హంస",img:"hamsa.png",emoji:"🦢"}
+],
+
+[
+{l:"ళ",w:"పళ్లు",img:"pallu.png",emoji:"🦷"},
+{l:"క్ష",w:"క్షత్రియ",img:"kshatriya.png",emoji:"🛡️"},
+{l:"ఱ",w:"ఱాము",img:"ramu.png",emoji:"👦"}
+]
 
 ]
 
-let all=[...vowels,...consonants]
+
+let all=[...vowels]
+
+consonantRows.forEach(r=>all.push(...r))
 
 let index=0
+
+
 
 function show(){
 
@@ -264,14 +319,35 @@ let d=all[index]
 
 document.getElementById("letter").innerText=d.l
 document.getElementById("word").innerText=d.w
-document.getElementById("picture").src="images/"+d.img
 
-document.getElementById("picture").style.display=
-showPicture?"block":"none"
+let img=document.getElementById("picture")
+let emoji=document.getElementById("emoji")
 
-if(autoSound)speakLetter()
+emoji.innerText=""
+
+if(d.img){
+
+img.src="images/"+d.img
+img.style.display=showPicture?"block":"none"
+
+img.onerror=function(){
+
+img.style.display="none"
+emoji.innerText=d.emoji
 
 }
+
+}else{
+
+img.style.display="none"
+emoji.innerText=d.emoji
+
+}
+
+if(autoSound) speakLetter()
+
+}
+
 
 function nextLetter(){
 
@@ -280,12 +356,14 @@ show()
 
 }
 
+
 function randomLetter(){
 
 index=Math.floor(Math.random()*all.length)
 show()
 
 }
+
 
 function speakLetter(){
 
@@ -295,6 +373,7 @@ speechSynthesis.speak(msg)
 
 }
 
+
 function speakWord(){
 
 let msg=new SpeechSynthesisUtterance(all[index].w)
@@ -303,35 +382,63 @@ speechSynthesis.speak(msg)
 
 }
 
+
 function togglePicture(){
 
 showPicture=!showPicture
 
 document.getElementById("picBtn").innerText=
-showPicture?"🖼 Picture: ON":"🖼 Picture: OFF"
+
+showPicture?"🖼 Picture ON":"🖼 Picture OFF"
 
 show()
 
 }
+
 
 function toggleAuto(){
 
 autoSound=!autoSound
 
 document.getElementById("autoBtn").innerText=
-autoSound?"🔊 Auto Sound: ON":"🔊 Auto Sound: OFF"
+
+autoSound?"🔊 Auto Sound ON":"🔊 Auto Sound OFF"
 
 }
 
-function build(){
+
+function buildGrid(){
 
 let v=document.getElementById("vowels")
+
+vowels.forEach((x,i)=>{
+
+let s=document.createElement("span")
+s.innerText=x.l
+s.onclick=()=>{index=i;show()}
+
+let row=document.createElement("div")
+row.className="grid-row"
+
+row.appendChild(s)
+
+v.appendChild(row)
+
+})
+
+
 let c=document.getElementById("consonants")
 
-vowels.forEach(x=>{
+consonantRows.forEach((rowData,rowIndex)=>{
+
+let row=document.createElement("div")
+row.className="grid-row"
+
+rowData.forEach(x=>{
 
 let s=document.createElement("span")
 s.innerText=x.l
+
 s.onclick=()=>{
 
 index=all.indexOf(x)
@@ -339,26 +446,16 @@ show()
 
 }
 
-v.appendChild(s)
+row.appendChild(s)
 
 })
 
-consonants.forEach(x=>{
-
-let s=document.createElement("span")
-s.innerText=x.l
-s.onclick=()=>{
-
-index=all.indexOf(x)
-show()
-
-}
-
-c.appendChild(s)
+c.appendChild(row)
 
 })
 
 }
+
 
 function showHelp(){
 
@@ -372,27 +469,12 @@ document.getElementById("helpModal").style.display="none"
 
 }
 
-window.addEventListener("beforeinstallprompt",e=>{
 
-e.preventDefault()
-deferredPrompt=e
-
-})
-
-function installApp(){
-
-if(deferredPrompt){
-
-deferredPrompt.prompt()
-
-}
-
-}
-
-build()
+buildGrid()
 show()
 
 </script>
 
 </body>
+
 </html>
