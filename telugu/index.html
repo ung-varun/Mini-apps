@@ -2,40 +2,45 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Telugu Letters</title>
+<title>తెలుగు వర్ణమాల</title>
 
 <style>
 
 body{
 font-family: Arial;
-text-align:center;
 background:#f1f5f9;
+text-align:center;
 margin:0;
 }
 
 h1{
-margin-top:30px;
+margin-top:20px;
 }
 
-.letter{
+.section-title{
+margin-top:30px;
+font-size:22px;
+}
+
+.display{
 font-size:120px;
-margin:40px;
+margin:30px;
 }
 
 .word{
 font-size:28px;
-margin:10px;
+margin-bottom:20px;
 }
 
 button{
-padding:12px 20px;
-font-size:16px;
-margin:10px;
+padding:12px 18px;
+margin:6px;
 border:none;
 border-radius:8px;
-cursor:pointer;
 background:#2563eb;
 color:white;
+cursor:pointer;
+font-size:16px;
 }
 
 button:hover{
@@ -43,14 +48,23 @@ background:#1d4ed8;
 }
 
 .grid{
-display:none;
-margin-top:40px;
+margin:20px auto;
+max-width:700px;
 }
 
-.grid span{
-font-size:30px;
-margin:8px;
+.letter{
 display:inline-block;
+font-size:32px;
+padding:10px 14px;
+margin:5px;
+background:white;
+border-radius:8px;
+cursor:pointer;
+box-shadow:0 2px 5px rgba(0,0,0,0.15);
+}
+
+.letter:hover{
+background:#e2e8f0;
 }
 
 </style>
@@ -59,21 +73,24 @@ display:inline-block;
 
 <body>
 
-<h1>🔤 Telugu Letters</h1>
+<h1>తెలుగు వర్ణమాల</h1>
 
-<div class="letter" id="letter"></div>
+<div class="display" id="letter">అ</div>
+<div class="word" id="word">అమ్మ</div>
 
-<div class="word" id="word"></div>
+<button onclick="speakLetter()">🔊 అక్షరం</button>
+<button onclick="speakWord()">🔊 పదం</button>
+<button onclick="randomLetter()">Random</button>
 
-<button onclick="playSound()">🔊 Sound</button>
-<button onclick="nextLetter()">Next Letter</button>
-<button onclick="toggleGuide()">Show Letters Guide</button>
+<div class="section-title">అచ్చులు (Achulu)</div>
+<div class="grid" id="vowels"></div>
 
-<div class="grid" id="guide"></div>
+<div class="section-title">హల్లులు (Hallulu)</div>
+<div class="grid" id="consonants"></div>
 
 <script>
 
-const letters = [
+const data = [
 
 {l:"అ", w:"అమ్మ"},
 {l:"ఆ", w:"ఆవు"},
@@ -81,6 +98,7 @@ const letters = [
 {l:"ఈ", w:"ఈగ"},
 {l:"ఉ", w:"ఉడుత"},
 {l:"ఊ", w:"ఊయల"},
+{l:"ఋ", w:"ఋషి"},
 {l:"ఎ", w:"ఎలుక"},
 {l:"ఏ", w:"ఏనుగు"},
 {l:"ఐ", w:"ఐదు"},
@@ -90,48 +108,97 @@ const letters = [
 
 ];
 
-let current;
+const consonants = [
 
-function nextLetter(){
+{l:"క", w:"కలం"},
+{l:"ఖ", w:"ఖడ్గం"},
+{l:"గ", w:"గడియారం"},
+{l:"ఘ", w:"ఘంట"},
+{l:"చ", w:"చెట్టు"},
+{l:"ఛ", w:"ఛత్రం"},
+{l:"జ", w:"జలము"},
+{l:"ఝ", w:"ఝాన్సీ"},
+{l:"ట", w:"టమోటా"},
+{l:"ఠ", w:"ఠాకూర్"},
+{l:"డ", w:"డబ్బు"},
+{l:"ఢ", w:"ఢమరు"},
+{l:"త", w:"తల"},
+{l:"థ", w:"థర్మస్"},
+{l:"ద", w:"దనం"},
+{l:"ధ", w:"ధనం"},
+{l:"న", w:"నది"},
+{l:"ప", w:"పండు"},
+{l:"ఫ", w:"ఫలం"},
+{l:"బ", w:"బంతి"},
+{l:"భ", w:"భూమి"},
+{l:"మ", w:"మామిడి"},
+{l:"య", w:"యజ్ఞం"},
+{l:"ర", w:"రథం"},
+{l:"ల", w:"లత"},
+{l:"వ", w:"వనం"},
+{l:"శ", w:"శంకు"},
+{l:"ష", w:"షడ్రుచులు"},
+{l:"స", w:"సముద్రం"},
+{l:"హ", w:"హంస"},
+{l:"ళ", w:"పళ్లు"},
+{l:"క్ష", w:"క్షత్రియ"},
+{l:"ఱ", w:"ఱాము"}
 
-current = letters[Math.floor(Math.random()*letters.length)];
+];
 
-document.getElementById("letter").innerText = current.l;
-document.getElementById("word").innerText = current.w;
+let current = data[0];
 
+function show(letter,word){
+current = {l:letter,w:word};
+document.getElementById("letter").innerText = letter;
+document.getElementById("word").innerText = word;
 }
 
-function playSound(){
-
+function speakLetter(){
 const msg = new SpeechSynthesisUtterance(current.l);
-msg.lang = "te-IN";
-
+msg.lang="te-IN";
 speechSynthesis.speak(msg);
+}
+
+function speakWord(){
+const msg = new SpeechSynthesisUtterance(current.w);
+msg.lang="te-IN";
+speechSynthesis.speak(msg);
+}
+
+function randomLetter(){
+
+let all=[...data,...consonants];
+let r=all[Math.floor(Math.random()*all.length)];
+
+show(r.l,r.w);
 
 }
 
-function toggleGuide(){
+function build(){
 
-const guide = document.getElementById("guide");
+let v=document.getElementById("vowels");
+let c=document.getElementById("consonants");
 
-if(guide.style.display=="block"){
-guide.style.display="none";
-return;
-}
-
-guide.innerHTML="";
-
-letters.forEach(x=>{
+data.forEach(x=>{
 let span=document.createElement("span");
+span.className="letter";
 span.innerText=x.l;
-guide.appendChild(span);
+span.onclick=()=>show(x.l,x.w);
+v.appendChild(span);
 });
 
-guide.style.display="block";
+consonants.forEach(x=>{
+let span=document.createElement("span");
+span.className="letter";
+span.innerText=x.l;
+span.onclick=()=>show(x.l,x.w);
+c.appendChild(span);
+});
 
 }
 
-nextLetter();
+build();
 
 </script>
 
