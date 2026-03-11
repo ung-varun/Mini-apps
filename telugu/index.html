@@ -2,16 +2,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Telugu Varnamala</title>
+<title>తెలుగు వర్ణమాల</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="manifest" href="manifest.json">
 
 <style>
 
 body{
 font-family: Arial;
 margin:0;
-background:#f7f9fc;
+background:#f5f7fb;
 text-align:center;
 }
 
@@ -39,7 +41,7 @@ cursor:pointer;
 }
 
 button:hover{
-background:#1e4fd8;
+background:#1d4ed8;
 }
 
 .letter{
@@ -52,9 +54,10 @@ font-size:28px;
 margin:10px;
 }
 
-.picture{
-font-size:60px;
-margin:10px;
+img{
+max-width:200px;
+margin-top:10px;
+border-radius:10px;
 }
 
 .grid{
@@ -76,16 +79,30 @@ cursor:pointer;
 footer{
 margin-top:40px;
 padding:20px;
-background:#f1f5f9;
+background:#eef2f7;
 font-size:14px;
 }
 
-.github{
-margin-top:10px;
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,0.6);
+}
+
+.modal-content{
+background:white;
+padding:20px;
+margin:10% auto;
+width:80%;
+max-width:400px;
+border-radius:10px;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -95,9 +112,23 @@ margin-top:10px;
 తెలుగు వర్ణమాల
 
 <div class="controls">
-<button onclick="toggleLang()">తెలుగు / English</button>
-<button onclick="togglePicture()">Show/Hide Picture</button>
-<button onclick="toggleAuto()">Auto Sound</button>
+
+<button onclick="togglePicture()" id="picBtn">
+🖼 Picture: ON
+</button>
+
+<button onclick="toggleAuto()" id="autoBtn">
+🔊 Auto Sound: OFF
+</button>
+
+<button onclick="showHelp()">
+How to Use
+</button>
+
+<button onclick="installApp()">
+Install App
+</button>
+
 </div>
 
 </header>
@@ -105,7 +136,7 @@ margin-top:10px;
 
 <div class="letter" id="letter">అ</div>
 
-<div class="picture" id="picture">👩</div>
+<img id="picture" src="images/amma.jpg">
 
 <div class="word" id="word">అమ్మ</div>
 
@@ -125,46 +156,46 @@ margin-top:10px;
 </div>
 
 
-<div class="grid" id="grid"></div>
+<h3>అచ్చులు</h3>
+<div class="grid" id="vowels"></div>
+
+<h3>హల్లులు</h3>
+<div class="grid" id="consonants"></div>
 
 
-<section style="padding:20px">
+<div class="modal" id="helpModal">
 
-<h3>How Parents Can Use This</h3>
+<div class="modal-content">
+
+<h3>How Parents Can Use</h3>
 
 <p>
-Show the letter to the child and ask them to say the letter.
-Then play the sound to confirm pronunciation.
-Hide the picture and ask the child to guess the word.
-This helps kids learn letters faster.
+1. Show the letter to the child.<br>
+2. Ask the child to say the letter.<br>
+3. Tap 🔊 to hear pronunciation.<br>
+4. Turn off picture to test memory.<br>
 </p>
 
-</section>
+<button onclick="closeHelp()">Close</button>
+
+</div>
+
+</div>
 
 
 <footer>
 
-<div>
+⭐ Star on GitHub
 
-Built for kids learning Telugu
-
-</div>
-
-<div class="github">
-
-⭐ Star this project on GitHub  
 <br>
+
 <a href="https://github.com/ung-varun/Mini-apps">
-https://github.com/ung-varun/Mini-apps
+github.com/ung-varun/Mini-apps
 </a>
 
-</div>
-
-<div style="margin-top:10px">
+<br><br>
 
 Built by <b>Varun Ungurala</b>
-
-</div>
 
 </footer>
 
@@ -173,33 +204,70 @@ Built by <b>Varun Ungurala</b>
 
 let showPicture=true
 let autoSound=false
-let telugu=true
+let deferredPrompt
 
-const data=[
+const vowels=[
 
-{l:"అ",w:"అమ్మ",p:"👩"},
-{l:"ఆ",w:"ఆవు",p:"🐄"},
-{l:"ఇ",w:"ఇల్లు",p:"🏠"},
-{l:"ఈ",w:"ఈగ",p:"🪰"},
-{l:"ఉ",w:"ఉడుత",p:"🐿"},
-{l:"ఊ",w:"ఊయల",p:"🪑"},
-{l:"ఎ",w:"ఎలుక",p:"🐭"},
-{l:"ఏ",w:"ఏనుగు",p:"🐘"},
-{l:"ఐ",w:"ఐదు",p:"5️⃣"},
-{l:"ఒ",w:"ఒంటె",p:"🐪"},
-{l:"ఓ",w:"ఓడ",p:"🚢"}
+{l:"అ",w:"అమ్మ",img:"amma.jpg"},
+{l:"ఆ",w:"ఆవు",img:"aavu.jpg"},
+{l:"ఇ",w:"ఇల్లు",img:"illu.jpg"},
+{l:"ఈ",w:"ఈగ",img:"eega.jpg"},
+{l:"ఉ",w:"ఉడుత",img:"uduta.jpg"},
+{l:"ఊ",w:"ఊయల",img:"ooyala.jpg"},
+{l:"ఋ",w:"ఋషి",img:"rushi.jpg"},
+{l:"ఎ",w:"ఎలుక",img:"eluka.jpg"},
+{l:"ఏ",w:"ఏనుగు",img:"eenugu.jpg"},
+{l:"ఐ",w:"ఐదు",img:"aidu.jpg"},
+{l:"ఒ",w:"ఒంటె",img:"onte.jpg"},
+{l:"ఓ",w:"ఓడ",img:"oda.jpg"},
+{l:"ఔ",w:"ఔషధం",img:"oushadham.jpg"},
+{l:"అం",w:"అంకం",img:"ankam.jpg"},
+{l:"అః",w:"అః",img:"aha.jpg"}
 
 ]
 
-let current=0
+const consonants=[
+
+{l:"క",w:"కలం",img:"kalam.jpg"},
+{l:"ఖ",w:"ఖడ్గం",img:"khadgam.jpg"},
+{l:"గ",w:"గడియారం",img:"gadiyam.jpg"},
+{l:"ఘ",w:"ఘంట",img:"ghanta.jpg"},
+{l:"చ",w:"చెట్టు",img:"chettu.jpg"},
+{l:"జ",w:"జలము",img:"jalamu.jpg"},
+{l:"ట",w:"టమోటా",img:"tomato.jpg"},
+{l:"డ",w:"డబ్బు",img:"dabbu.jpg"},
+{l:"త",w:"తల",img:"tala.jpg"},
+{l:"ద",w:"దనం",img:"dhanam.jpg"},
+{l:"ప",w:"పండు",img:"pandu.jpg"},
+{l:"బ",w:"బంతి",img:"banthi.jpg"},
+{l:"మ",w:"మామిడి",img:"mamidi.jpg"},
+{l:"య",w:"యజ్ఞం",img:"yagnam.jpg"},
+{l:"ర",w:"రథం",img:"ratham.jpg"},
+{l:"ల",w:"లత",img:"latha.jpg"},
+{l:"వ",w:"వనం",img:"vanam.jpg"},
+{l:"శ",w:"శంఖం",img:"shankam.jpg"},
+{l:"స",w:"సముద్రం",img:"samudram.jpg"},
+{l:"హ",w:"హంస",img:"hamsa.jpg"},
+{l:"ళ",w:"పళ్లు",img:"pallu.jpg"},
+{l:"క్ష",w:"క్షత్రియ",img:"kshatriya.jpg"},
+{l:"ఱ",w:"ఱాము",img:"ramu.jpg"}
+
+]
+
+let all=[...vowels,...consonants]
+
+let index=0
 
 function show(){
 
-let d=data[current]
+let d=all[index]
 
 document.getElementById("letter").innerText=d.l
 document.getElementById("word").innerText=d.w
-document.getElementById("picture").innerText=showPicture?d.p:""
+document.getElementById("picture").src="images/"+d.img
+
+document.getElementById("picture").style.display=
+showPicture?"block":"none"
 
 if(autoSound)speakLetter()
 
@@ -207,21 +275,21 @@ if(autoSound)speakLetter()
 
 function nextLetter(){
 
-current=(current+1)%data.length
+index=(index+1)%all.length
 show()
 
 }
 
 function randomLetter(){
 
-current=Math.floor(Math.random()*data.length)
+index=Math.floor(Math.random()*all.length)
 show()
 
 }
 
 function speakLetter(){
 
-let msg=new SpeechSynthesisUtterance(data[current].l)
+let msg=new SpeechSynthesisUtterance(all[index].l)
 msg.lang="te-IN"
 speechSynthesis.speak(msg)
 
@@ -229,7 +297,7 @@ speechSynthesis.speak(msg)
 
 function speakWord(){
 
-let msg=new SpeechSynthesisUtterance(data[current].w)
+let msg=new SpeechSynthesisUtterance(all[index].w)
 msg.lang="te-IN"
 speechSynthesis.speak(msg)
 
@@ -238,6 +306,10 @@ speechSynthesis.speak(msg)
 function togglePicture(){
 
 showPicture=!showPicture
+
+document.getElementById("picBtn").innerText=
+showPicture?"🖼 Picture: ON":"🖼 Picture: OFF"
+
 show()
 
 }
@@ -246,37 +318,78 @@ function toggleAuto(){
 
 autoSound=!autoSound
 
-}
-
-function toggleLang(){
-
-alert("English labels coming soon")
+document.getElementById("autoBtn").innerText=
+autoSound?"🔊 Auto Sound: ON":"🔊 Auto Sound: OFF"
 
 }
 
-function buildGrid(){
+function build(){
 
-let g=document.getElementById("grid")
+let v=document.getElementById("vowels")
+let c=document.getElementById("consonants")
 
-data.forEach((x,i)=>{
+vowels.forEach(x=>{
 
 let s=document.createElement("span")
 s.innerText=x.l
-
 s.onclick=()=>{
 
-current=i
+index=all.indexOf(x)
 show()
 
 }
 
-g.appendChild(s)
+v.appendChild(s)
+
+})
+
+consonants.forEach(x=>{
+
+let s=document.createElement("span")
+s.innerText=x.l
+s.onclick=()=>{
+
+index=all.indexOf(x)
+show()
+
+}
+
+c.appendChild(s)
 
 })
 
 }
 
-buildGrid()
+function showHelp(){
+
+document.getElementById("helpModal").style.display="block"
+
+}
+
+function closeHelp(){
+
+document.getElementById("helpModal").style.display="none"
+
+}
+
+window.addEventListener("beforeinstallprompt",e=>{
+
+e.preventDefault()
+deferredPrompt=e
+
+})
+
+function installApp(){
+
+if(deferredPrompt){
+
+deferredPrompt.prompt()
+
+}
+
+}
+
+build()
 show()
 
 </script>
