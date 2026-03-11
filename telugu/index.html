@@ -1,112 +1,139 @@
-import { useState } from "react";
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Telugu Letters</title>
 
-// Telugu vowels (including ౠ which was missing)
-const vowels = ["అ","ఆ","ఇ","ఈ","ఉ","ఊ","ఋ","ౠ","ఎ","ఏ","ఐ","ఒ","ఓ","ఔ","అం","అః"];
+<style>
 
-// Example words for kids (emoji used as simple images)
-const examples = {
-  "అ": { word: "అరటి", emoji: "🍌" },
-  "ఆ": { word: "ఆవు", emoji: "🐄" },
-  "ఇ": { word: "ఇల్లు", emoji: "🏠" },
-  "ఈ": { word: "ఈగ", emoji: "🪰" },
-  "ఉ": { word: "ఉడుత", emoji: "🐿️" },
-  "ఊ": { word: "ఊయల", emoji: "🪢" },
-  "ఋ": { word: "ఋషి", emoji: "🧘" },
-  "ౠ": { word: "ౠషి", emoji: "🧘" },
-  "ఎ": { word: "ఎలుక", emoji: "🐭" },
-  "ఏ": { word: "ఏనుగు", emoji: "🐘" },
-  "ఐ": { word: "ఐదు", emoji: "5️⃣" },
-  "ఒ": { word: "ఒంటె", emoji: "🐫" },
-  "ఓ": { word: "ఓడ", emoji: "⛵" },
-  "ఔ": { word: "ఔషధం", emoji: "💊" }
-};
-
-export default function TeluguLetterApp(){
-  const [letter,setLetter] = useState("అ");
-  const [showGuide,setShowGuide] = useState(false);
-
-  const example = examples[letter];
-
-  const randomLetter = ()=>{
-    const l = vowels[Math.floor(Math.random()*vowels.length)];
-    setLetter(l);
-  }
-
-  const speakLetter = ()=>{
-    const utterance = new SpeechSynthesisUtterance(letter);
-    utterance.lang = "te-IN";
-    speechSynthesis.speak(utterance);
-  }
-
-  const speakWord = ()=>{
-    if(!example) return;
-    const utterance = new SpeechSynthesisUtterance(example.word);
-    utterance.lang = "te-IN";
-    speechSynthesis.speak(utterance);
-  }
-
-  return (
-    <div className="h-screen flex flex-col items-center justify-center gap-8 p-6">
-
-      {/* Large Letter */}
-      <div className="text-9xl font-bold">{letter}</div>
-
-      {/* Buttons */}
-      <div className="flex gap-4 flex-wrap justify-center">
-        <button 
-          onClick={randomLetter} 
-          className="px-6 py-3 rounded-2xl shadow text-lg"
-        >
-          Show Random Letter
-        </button>
-
-        <button 
-          onClick={speakLetter} 
-          className="px-6 py-3 rounded-2xl shadow text-lg"
-        >
-          🔊 Hear Letter
-        </button>
-      </div>
-
-      {/* Example word */}
-      {example && (
-        <div className="flex flex-col items-center gap-2 border rounded-2xl p-4">
-          <div className="text-6xl">{example.emoji}</div>
-          <div className="text-2xl font-semibold">{example.word}</div>
-          <button
-            onClick={speakWord}
-            className="px-4 py-2 rounded-xl shadow text-sm"
-          >
-            🔊 Hear Word
-          </button>
-        </div>
-      )}
-
-      {/* Toggle Guide */}
-      <button
-        onClick={()=>setShowGuide(!showGuide)}
-        className="text-sm underline opacity-80"
-      >
-        {showGuide ? "Hide Letter Guide" : "Show Letter Guide"}
-      </button>
-
-      {/* Vowel Positions */}
-      {showGuide && (
-        <div className="grid grid-cols-8 gap-3 text-2xl border p-4 rounded-xl">
-          {vowels.map((v,i)=> (
-            <button
-              key={i}
-              onClick={()=>setLetter(v)}
-              className={`w-10 h-10 flex items-center justify-center border rounded-lg hover:scale-110 transition ${v===letter ? "font-bold bg-gray-200" : ""}`}
-            >
-              {v}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <p className="text-sm opacity-70">Telugu Vowels Practice</p>
-    </div>
-  );
+body{
+font-family: Arial;
+text-align:center;
+background:#f1f5f9;
+margin:0;
 }
 
+h1{
+margin-top:30px;
+}
+
+.letter{
+font-size:120px;
+margin:40px;
+}
+
+.word{
+font-size:28px;
+margin:10px;
+}
+
+button{
+padding:12px 20px;
+font-size:16px;
+margin:10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background:#2563eb;
+color:white;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.grid{
+display:none;
+margin-top:40px;
+}
+
+.grid span{
+font-size:30px;
+margin:8px;
+display:inline-block;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🔤 Telugu Letters</h1>
+
+<div class="letter" id="letter"></div>
+
+<div class="word" id="word"></div>
+
+<button onclick="playSound()">🔊 Sound</button>
+<button onclick="nextLetter()">Next Letter</button>
+<button onclick="toggleGuide()">Show Letters Guide</button>
+
+<div class="grid" id="guide"></div>
+
+<script>
+
+const letters = [
+
+{l:"అ", w:"అమ్మ"},
+{l:"ఆ", w:"ఆవు"},
+{l:"ఇ", w:"ఇల్లు"},
+{l:"ఈ", w:"ఈగ"},
+{l:"ఉ", w:"ఉడుత"},
+{l:"ఊ", w:"ఊయల"},
+{l:"ఎ", w:"ఎలుక"},
+{l:"ఏ", w:"ఏనుగు"},
+{l:"ఐ", w:"ఐదు"},
+{l:"ఒ", w:"ఒంటె"},
+{l:"ఓ", w:"ఓడ"},
+{l:"ఔ", w:"ఔషధం"}
+
+];
+
+let current;
+
+function nextLetter(){
+
+current = letters[Math.floor(Math.random()*letters.length)];
+
+document.getElementById("letter").innerText = current.l;
+document.getElementById("word").innerText = current.w;
+
+}
+
+function playSound(){
+
+const msg = new SpeechSynthesisUtterance(current.l);
+msg.lang = "te-IN";
+
+speechSynthesis.speak(msg);
+
+}
+
+function toggleGuide(){
+
+const guide = document.getElementById("guide");
+
+if(guide.style.display=="block"){
+guide.style.display="none";
+return;
+}
+
+guide.innerHTML="";
+
+letters.forEach(x=>{
+let span=document.createElement("span");
+span.innerText=x.l;
+guide.appendChild(span);
+});
+
+guide.style.display="block";
+
+}
+
+nextLetter();
+
+</script>
+
+</body>
+</html>
