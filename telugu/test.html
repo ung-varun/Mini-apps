@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Telugu Letters</title>
+
+<style>
+
+body{
+font-family: Arial;
+text-align:center;
+background:#f1f5f9;
+margin:0;
+}
+
+h1{
+margin-top:30px;
+}
+
+.letter{
+font-size:120px;
+margin:40px;
+}
+
+.word{
+font-size:28px;
+margin:10px;
+}
+
+button{
+padding:12px 20px;
+font-size:16px;
+margin:10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background:#2563eb;
+color:white;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.grid{
+display:none;
+margin-top:40px;
+}
+
+.grid span{
+font-size:30px;
+margin:8px;
+display:inline-block;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🔤 Telugu Letters</h1>
+
+<div class="letter" id="letter"></div>
+
+<div class="word" id="word"></div>
+
+<button onclick="playSound()">🔊 Sound</button>
+<button onclick="nextLetter()">Next Letter</button>
+<button onclick="toggleGuide()">Show Letters Guide</button>
+
+<div class="grid" id="guide"></div>
+
+<script>
+
+const letters = [
+
+{l:"అ", w:"అమ్మ"},
+{l:"ఆ", w:"ఆవు"},
+{l:"ఇ", w:"ఇల్లు"},
+{l:"ఈ", w:"ఈగ"},
+{l:"ఉ", w:"ఉడుత"},
+{l:"ఊ", w:"ఊయల"},
+{l:"ఎ", w:"ఎలుక"},
+{l:"ఏ", w:"ఏనుగు"},
+{l:"ఐ", w:"ఐదు"},
+{l:"ఒ", w:"ఒంటె"},
+{l:"ఓ", w:"ఓడ"},
+{l:"ఔ", w:"ఔషధం"}
+
+];
+
+let current;
+
+function nextLetter(){
+
+current = letters[Math.floor(Math.random()*letters.length)];
+
+document.getElementById("letter").innerText = current.l;
+document.getElementById("word").innerText = current.w;
+
+}
+
+function playSound(){
+
+const msg = new SpeechSynthesisUtterance(current.l);
+msg.lang = "te-IN";
+
+speechSynthesis.speak(msg);
+
+}
+
+function toggleGuide(){
+
+const guide = document.getElementById("guide");
+
+if(guide.style.display=="block"){
+guide.style.display="none";
+return;
+}
+
+guide.innerHTML="";
+
+letters.forEach(x=>{
+let span=document.createElement("span");
+span.innerText=x.l;
+guide.appendChild(span);
+});
+
+guide.style.display="block";
+
+}
+
+nextLetter();
+
+</script>
+
+</body>
+</html>
