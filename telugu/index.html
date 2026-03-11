@@ -2,69 +2,86 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>తెలుగు వర్ణమాల</title>
+<title>Telugu Varnamala</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 
 body{
 font-family: Arial;
-background:#f1f5f9;
-text-align:center;
 margin:0;
+background:#f7f9fc;
+text-align:center;
 }
 
-h1{
-margin-top:20px;
-}
-
-.section-title{
-margin-top:30px;
+header{
+background:#2563eb;
+color:white;
+padding:15px;
 font-size:22px;
+font-weight:bold;
 }
 
-.display{
+.controls{
+margin-top:10px;
+}
+
+button{
+padding:12px 16px;
+margin:6px;
+border:none;
+border-radius:10px;
+font-size:16px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#1e4fd8;
+}
+
+.letter{
 font-size:120px;
-margin:30px;
+margin-top:20px;
 }
 
 .word{
 font-size:28px;
-margin-bottom:20px;
+margin:10px;
 }
 
-button{
-padding:12px 18px;
-margin:6px;
-border:none;
-border-radius:8px;
-background:#2563eb;
-color:white;
-cursor:pointer;
-font-size:16px;
-}
-
-button:hover{
-background:#1d4ed8;
+.picture{
+font-size:60px;
+margin:10px;
 }
 
 .grid{
-margin:20px auto;
-max-width:700px;
+margin-top:20px;
+padding:10px;
 }
 
-.letter{
+.grid span{
 display:inline-block;
-font-size:32px;
-padding:10px 14px;
-margin:5px;
+font-size:28px;
 background:white;
+padding:10px;
+margin:6px;
 border-radius:8px;
+box-shadow:0 2px 6px rgba(0,0,0,0.15);
 cursor:pointer;
-box-shadow:0 2px 5px rgba(0,0,0,0.15);
 }
 
-.letter:hover{
-background:#e2e8f0;
+footer{
+margin-top:40px;
+padding:20px;
+background:#f1f5f9;
+font-size:14px;
+}
+
+.github{
+margin-top:10px;
 }
 
 </style>
@@ -73,132 +90,194 @@ background:#e2e8f0;
 
 <body>
 
-<h1>తెలుగు వర్ణమాల</h1>
+<header>
 
-<div class="display" id="letter">అ</div>
+తెలుగు వర్ణమాల
+
+<div class="controls">
+<button onclick="toggleLang()">తెలుగు / English</button>
+<button onclick="togglePicture()">Show/Hide Picture</button>
+<button onclick="toggleAuto()">Auto Sound</button>
+</div>
+
+</header>
+
+
+<div class="letter" id="letter">అ</div>
+
+<div class="picture" id="picture">👩</div>
+
 <div class="word" id="word">అమ్మ</div>
 
-<button onclick="speakLetter()">🔊 అక్షరం</button>
-<button onclick="speakWord()">🔊 పదం</button>
+
+<div>
+
+<button onclick="speakLetter()">🔊 Letter</button>
+<button onclick="speakWord()">🔊 Word</button>
+
+</div>
+
+<div>
+
+<button onclick="nextLetter()">Next</button>
 <button onclick="randomLetter()">Random</button>
 
-<div class="section-title">అచ్చులు (Achulu)</div>
-<div class="grid" id="vowels"></div>
+</div>
 
-<div class="section-title">హల్లులు (Hallulu)</div>
-<div class="grid" id="consonants"></div>
+
+<div class="grid" id="grid"></div>
+
+
+<section style="padding:20px">
+
+<h3>How Parents Can Use This</h3>
+
+<p>
+Show the letter to the child and ask them to say the letter.
+Then play the sound to confirm pronunciation.
+Hide the picture and ask the child to guess the word.
+This helps kids learn letters faster.
+</p>
+
+</section>
+
+
+<footer>
+
+<div>
+
+Built for kids learning Telugu
+
+</div>
+
+<div class="github">
+
+⭐ Star this project on GitHub  
+<br>
+<a href="https://github.com/ung-varun/Mini-apps">
+https://github.com/ung-varun/Mini-apps
+</a>
+
+</div>
+
+<div style="margin-top:10px">
+
+Built by <b>Varun Ungurala</b>
+
+</div>
+
+</footer>
+
 
 <script>
 
-const data = [
+let showPicture=true
+let autoSound=false
+let telugu=true
 
-{l:"అ", w:"అమ్మ"},
-{l:"ఆ", w:"ఆవు"},
-{l:"ఇ", w:"ఇల్లు"},
-{l:"ఈ", w:"ఈగ"},
-{l:"ఉ", w:"ఉడుత"},
-{l:"ఊ", w:"ఊయల"},
-{l:"ఋ", w:"ఋషి"},
-{l:"ఎ", w:"ఎలుక"},
-{l:"ఏ", w:"ఏనుగు"},
-{l:"ఐ", w:"ఐదు"},
-{l:"ఒ", w:"ఒంటె"},
-{l:"ఓ", w:"ఓడ"},
-{l:"ఔ", w:"ఔషధం"}
+const data=[
 
-];
+{l:"అ",w:"అమ్మ",p:"👩"},
+{l:"ఆ",w:"ఆవు",p:"🐄"},
+{l:"ఇ",w:"ఇల్లు",p:"🏠"},
+{l:"ఈ",w:"ఈగ",p:"🪰"},
+{l:"ఉ",w:"ఉడుత",p:"🐿"},
+{l:"ఊ",w:"ఊయల",p:"🪑"},
+{l:"ఎ",w:"ఎలుక",p:"🐭"},
+{l:"ఏ",w:"ఏనుగు",p:"🐘"},
+{l:"ఐ",w:"ఐదు",p:"5️⃣"},
+{l:"ఒ",w:"ఒంటె",p:"🐪"},
+{l:"ఓ",w:"ఓడ",p:"🚢"}
 
-const consonants = [
+]
 
-{l:"క", w:"కలం"},
-{l:"ఖ", w:"ఖడ్గం"},
-{l:"గ", w:"గడియారం"},
-{l:"ఘ", w:"ఘంట"},
-{l:"చ", w:"చెట్టు"},
-{l:"ఛ", w:"ఛత్రం"},
-{l:"జ", w:"జలము"},
-{l:"ఝ", w:"ఝాన్సీ"},
-{l:"ట", w:"టమోటా"},
-{l:"ఠ", w:"ఠాకూర్"},
-{l:"డ", w:"డబ్బు"},
-{l:"ఢ", w:"ఢమరు"},
-{l:"త", w:"తల"},
-{l:"థ", w:"థర్మస్"},
-{l:"ద", w:"దనం"},
-{l:"ధ", w:"ధనం"},
-{l:"న", w:"నది"},
-{l:"ప", w:"పండు"},
-{l:"ఫ", w:"ఫలం"},
-{l:"బ", w:"బంతి"},
-{l:"భ", w:"భూమి"},
-{l:"మ", w:"మామిడి"},
-{l:"య", w:"యజ్ఞం"},
-{l:"ర", w:"రథం"},
-{l:"ల", w:"లత"},
-{l:"వ", w:"వనం"},
-{l:"శ", w:"శంకు"},
-{l:"ష", w:"షడ్రుచులు"},
-{l:"స", w:"సముద్రం"},
-{l:"హ", w:"హంస"},
-{l:"ళ", w:"పళ్లు"},
-{l:"క్ష", w:"క్షత్రియ"},
-{l:"ఱ", w:"ఱాము"}
+let current=0
 
-];
+function show(){
 
-let current = data[0];
+let d=data[current]
 
-function show(letter,word){
-current = {l:letter,w:word};
-document.getElementById("letter").innerText = letter;
-document.getElementById("word").innerText = word;
+document.getElementById("letter").innerText=d.l
+document.getElementById("word").innerText=d.w
+document.getElementById("picture").innerText=showPicture?d.p:""
+
+if(autoSound)speakLetter()
+
 }
 
-function speakLetter(){
-const msg = new SpeechSynthesisUtterance(current.l);
-msg.lang="te-IN";
-speechSynthesis.speak(msg);
-}
+function nextLetter(){
 
-function speakWord(){
-const msg = new SpeechSynthesisUtterance(current.w);
-msg.lang="te-IN";
-speechSynthesis.speak(msg);
+current=(current+1)%data.length
+show()
+
 }
 
 function randomLetter(){
 
-let all=[...data,...consonants];
-let r=all[Math.floor(Math.random()*all.length)];
-
-show(r.l,r.w);
+current=Math.floor(Math.random()*data.length)
+show()
 
 }
 
-function build(){
+function speakLetter(){
 
-let v=document.getElementById("vowels");
-let c=document.getElementById("consonants");
-
-data.forEach(x=>{
-let span=document.createElement("span");
-span.className="letter";
-span.innerText=x.l;
-span.onclick=()=>show(x.l,x.w);
-v.appendChild(span);
-});
-
-consonants.forEach(x=>{
-let span=document.createElement("span");
-span.className="letter";
-span.innerText=x.l;
-span.onclick=()=>show(x.l,x.w);
-c.appendChild(span);
-});
+let msg=new SpeechSynthesisUtterance(data[current].l)
+msg.lang="te-IN"
+speechSynthesis.speak(msg)
 
 }
 
-build();
+function speakWord(){
+
+let msg=new SpeechSynthesisUtterance(data[current].w)
+msg.lang="te-IN"
+speechSynthesis.speak(msg)
+
+}
+
+function togglePicture(){
+
+showPicture=!showPicture
+show()
+
+}
+
+function toggleAuto(){
+
+autoSound=!autoSound
+
+}
+
+function toggleLang(){
+
+alert("English labels coming soon")
+
+}
+
+function buildGrid(){
+
+let g=document.getElementById("grid")
+
+data.forEach((x,i)=>{
+
+let s=document.createElement("span")
+s.innerText=x.l
+
+s.onclick=()=>{
+
+current=i
+show()
+
+}
+
+g.appendChild(s)
+
+})
+
+}
+
+buildGrid()
+show()
 
 </script>
 
