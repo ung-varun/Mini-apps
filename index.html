@@ -9,14 +9,14 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg:       #080c14;
-    --surface:  #0f1624;
-    --border:   #1e2d45;
-    --text:     #e8edf5;
-    --muted:    #5a6a80;
-    --blue:     #4f8ef7;
-    --saffron:  #f7974f;
-    --green:    #4fbe82;
+    --bg:       #f8f9fc;
+    --surface:  #ffffff;
+    --border:   #e2e8f0;
+    --text:     #0f172a;
+    --muted:    #64748b;
+    --blue:     #2563eb;
+    --saffron:  #ea6c1a;
+    --green:    #16a34a;
   }
 
   body {
@@ -32,28 +32,27 @@
     content: '';
     position: fixed; inset: 0;
     z-index: 0;
-    /* dot grid via radial-gradient */
-    background-image: radial-gradient(circle, rgba(148,163,184,0.22) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgba(100,116,139,0.28) 1px, transparent 1px);
     background-size: 28px 28px;
     pointer-events: none;
   }
 
-  /* Radial mask: bright centre fading to dark edges — the "glowing surface" feel */
+  /* Radial mask: transparent centre, bg-coloured edges — dots fade out toward edges */
   body::after {
     content: '';
     position: fixed; inset: 0;
     z-index: 0;
     background: radial-gradient(
-      ellipse 80% 60% at 50% 40%,
+      ellipse 80% 60% at 50% 38%,
       transparent 0%,
-      transparent 35%,
-      rgba(8,12,20,0.55) 65%,
-      rgba(8,12,20,0.92) 100%
+      transparent 30%,
+      rgba(248,249,252,0.6) 60%,
+      rgba(248,249,252,0.96) 100%
     );
     pointer-events: none;
   }
 
-  /* Coloured accent glow at the centre — sits between dots and content */
+  /* Subtle colour tint in the centre */
   .glow-spot {
     position: fixed;
     top: 0; left: 50%;
@@ -62,8 +61,8 @@
     border-radius: 50%;
     background: radial-gradient(
       ellipse at center,
-      rgba(79,142,247,0.07) 0%,
-      rgba(247,151,79,0.04) 40%,
+      rgba(37,99,235,0.05) 0%,
+      rgba(234,108,26,0.03) 40%,
       transparent 70%
     );
     pointer-events: none;
@@ -97,7 +96,7 @@
     font-weight: 800;
     line-height: 1.0;
     letter-spacing: -1.5px;
-    background: linear-gradient(135deg, #ffffff 0%, #7a8fa8 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #475569 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -203,8 +202,8 @@
     margin-bottom: 18px;
     position: relative; z-index: 1;
   }
-  .icon-telugu { font-family: 'Noto Sans Telugu', sans-serif; color: #7ab3f9; }
-  .icon-hindi  { font-family: 'Noto Sans Devanagari', sans-serif; color: #f9b97a; }
+  .icon-telugu { font-family: 'Noto Sans Telugu', sans-serif; color: #1d4ed8; }
+  .icon-hindi  { font-family: 'Noto Sans Devanagari', sans-serif; color: #c2510f; }
 
   .card-lang {
     font-size: 10px;
